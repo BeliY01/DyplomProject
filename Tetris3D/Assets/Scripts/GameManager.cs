@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour
 
     private static GameManager instance;
     private static int points = 0;
+    //private const int SPEED_UP_THRESHOLD = 50;
 
     private void Awake()
     {
@@ -26,6 +28,9 @@ public class GameManager : MonoBehaviour
 
     public static void GameOver()
     {
+        PlayerPrefs.SetString("SavedScene", SceneManager.GetActiveScene().name);
+        PlayerPrefs.Save();
+
         instance.UIManager.DisplayGameOverPanel(points);
         instance.DeactivateScripts();
         gameOver = true;
@@ -42,6 +47,14 @@ public class GameManager : MonoBehaviour
     {
         points += p;
         instance.UIManager.DisplayPoints(points);
+
+        // Check if points have reached the threshold for speeding up
+        if (points >= 10)
+        {
+            Movement.CheckSpeedUp(); // Trigger speed-up in the Movement class
+           /* points -= 10;*/ // Reset points to allow for the next threshold
+        }
+
     }
 
     public void PlayAgain()

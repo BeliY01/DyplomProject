@@ -114,11 +114,10 @@ public class GridController : MonoBehaviour
         return new Vector2Int(Mathf.RoundToInt(newVector.x), Mathf.RoundToInt(newVector.y));
     }
 
-    #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, (Vector3)size*spacing);
+        Gizmos.DrawWireCube(transform.position, (Vector3)size * spacing);
     }
-    #endif
+        
 }

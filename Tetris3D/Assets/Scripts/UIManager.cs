@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField]
+     [SerializeField]
     private Text pointsDisplay;
     [SerializeField]
     private GameObject gameOverPanel;
@@ -22,7 +22,6 @@ public class UIManager : MonoBehaviour
     {
         pointsDisplay.text = "Points: " + points;
     }
-
     public void DisplayGameOverPanel(int score)
     {
         gameOverPanel.SetActive(true);

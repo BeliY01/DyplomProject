@@ -9,6 +9,8 @@ public class Movement : MonoBehaviour
     public float smoothRotationSpeed;
     [SerializeField]
     private float speedUpDelta;
+    //[SerializeField]
+    //private int scoreThreshold = 50;
     [SerializeField]
     private int amountOfRowsToSpeedUp;
     [SerializeField]
@@ -91,14 +93,21 @@ public class Movement : MonoBehaviour
         return true;
     }
 
+    //public static void AddScore(int points)
+    //{
+    //    instance.rowsCounter += points;
+    //    Movement.CheckSpeedUp(); // Corrected to use the type name instead of the instance
+    //}
+
     public static void CheckSpeedUp()
     {
-        instance.rowsCounter++;
-        if(instance.rowsCounter == instance.amountOfRowsToSpeedUp)
-        {
-            instance.rowsCounter = 0;
-            instance.SpeedUp();
-        }
+        //instance.rowsCounter++;
+        //if (instance.rowsCounter == instance.amountOfRowsToSpeedUp)
+        //{
+        //    instance.rowsCounter = 0;
+        //    instance.SpeedUp();
+        //}
+        instance.SpeedUp(); // Directly call the SpeedUp method
     }
 
     private void SpeedUp()
