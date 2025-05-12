@@ -18,9 +18,17 @@ public class UIManager : MonoBehaviour
 
     private GameObject previousNextShape;
 
+
     public void DisplayPoints(int points)
     {
         pointsDisplay.text = "Points: " + points;
+        var userCheck = FindObjectOfType<YourNamespace.UserCheck>();
+        if (userCheck != null)
+        {
+            // nickname — это имя текущего игрока, его нужно где-то хранить (например, в PlayerPrefs)
+            string nickname = PlayerPrefs.GetString("CurrentNickname", "");
+            userCheck.UpdateUserPoints(nickname, points);
+        }
     }
     public void DisplayGameOverPanel(int score)
     {
