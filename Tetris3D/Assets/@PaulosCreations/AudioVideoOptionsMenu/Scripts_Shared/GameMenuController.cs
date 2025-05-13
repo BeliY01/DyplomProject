@@ -32,7 +32,7 @@ namespace PaulosMenuController
 
         private void Start()
         {
-            mainCanvasObj.SetActive(false);
+            mainCanvasObj.SetActive(true);
 
             graphicsPanelObj.SetActive(false);
             audioPanelObj.SetActive(false);
