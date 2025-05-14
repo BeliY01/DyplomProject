@@ -17,7 +17,7 @@ namespace PaulosMenuController
         [SerializeField]
         private GameObject mainCanvasObj;
         [SerializeField]
-        private GameObject mainMenuPanelObj, optionsPanelObj, graphicsPanelObj, audioPanelObj, ;
+        private GameObject mainMenuPanelObj, optionsPanelObj, graphicsPanelObj, audioPanelObj;
         [SerializeField]
         private GameObject closeGameImageObj;
 

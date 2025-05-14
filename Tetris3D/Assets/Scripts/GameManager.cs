@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayAgain()
     {
+        points = 0;
         Scene current = SceneManager.GetActiveScene();
         SceneManager.LoadScene(current.name);   
     }
