@@ -566,7 +566,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1126783973
 MonoBehaviour:
@@ -1018,7 +1018,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nicknameInputField: {fileID: 1477685484}
-  databaseFileName: UserDatabase.db
 --- !u!1 &1640278977
 GameObject:
   m_ObjectHideFlags: 0
@@ -1620,6 +1619,34 @@ PrefabInstance:
     - target: {fileID: 8718495757915345052, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}
       propertyPath: m_FontData.m_FontSize
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8865443679737369136, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8865443679737369136, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8865443679737369136, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8865443679737369136, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8865443679737369136, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: VerifyInputs
+      objectReference: {fileID: 0}
+    - target: {fileID: 8865443679737369136, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UserAddDBandCheck, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8865443679737369136, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4d29d154f6d1fd47b77f39b617fb4b4, type: 3}

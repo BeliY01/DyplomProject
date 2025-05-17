@@ -12,18 +12,27 @@ namespace YourNamespace
         private InputField nicknameInputField; // Reference to the textbox (InputField)
         [SerializeField]
         private string databaseFileName = "UserDatabase.db"; // SQLite database file name
+        [SerializeField]
+        private Button saveProgressButton; // Button to save the game result
 
         private string databaseFilePath;
 
         private void Start()
         {
-            // Set the full path for the database file
-            databaseFilePath = Path.Combine(Application.persistentDataPath, databaseFileName);
-
-            // Create the database if it doesn't exist
+            #if UNITY_EDITOR
+            databaseFilePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, databaseFileName);
+            #else
+            databaseFilePath = Path.Combine(Application.dataPath, databaseFileName);
+            #endif
             if (!File.Exists(databaseFilePath))
             {
                 CreateDatabase();
+            }
+
+            // Assign the SaveCurrentPoints method to the button's onClick event
+            if (saveProgressButton != null)
+            {
+                saveProgressButton.onClick.AddListener(SaveCurrentPoints);
             }
         }
 
@@ -33,16 +42,15 @@ namespace YourNamespace
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
             using var command = connection.CreateCommand();
-            // Create a table to store user logins and game progress
             command.CommandText = @"
-                CREATE TABLE IF NOT EXISTS Users (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Nickname TEXT UNIQUE NOT NULL,
-                    Progress TEXT,
-                    Points INTEGER DEFAULT 0
-                );";
+                    CREATE TABLE IF NOT EXISTS Users (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Nickname TEXT UNIQUE NOT NULL,
+                        Progress TEXT,
+                        Points INTEGER DEFAULT 0
+                    );";
             command.ExecuteNonQuery();
-            Debug.Log("Database created successfully.");
+            Debug.Log("Database created successfully at: " + databaseFilePath);
         }
 
         public void AddOrContinueGame()
@@ -61,23 +69,20 @@ namespace YourNamespace
                 using var connection = new SqliteConnection(connectionString);
                 connection.Open();
                 using var command = connection.CreateCommand();
-                // Check if the nickname already exists
                 command.CommandText = "SELECT Progress FROM Users WHERE Nickname = @nickname";
                 command.Parameters.AddWithValue("@nickname", nickname);
                 var result = command.ExecuteScalar();
 
                 if (result != null)
                 {
-                    // Nickname exists, continue the game
                     string progress = result.ToString();
                     Debug.Log($"Welcome back, {nickname}! Continuing game from progress: {progress}");
                     LoadGameScene();
                 }
                 else
                 {
-                    // Nickname does not exist, add it to the database
                     command.CommandText = "INSERT INTO Users (Nickname, Progress) VALUES (@nickname, @progress)";
-                    command.Parameters.AddWithValue("@progress", "NewGame"); // Default progress for new users
+                    command.Parameters.AddWithValue("@progress", "NewGame");
                     command.ExecuteNonQuery();
                     Debug.Log($"Nickname '{nickname}' added to the database. Starting a new game.");
                     LoadGameScene();
@@ -91,12 +96,54 @@ namespace YourNamespace
 
         private void LoadGameScene()
         {
-            SceneManager.LoadScene("Game"); // Replace "Game" with the actual name of your game scene
+            SceneManager.LoadScene("Game");
+        }
+
+        // Call this from your Save Progress button
+        public void SaveCurrentPoints()
+        {
+            if (nicknameInputField == null)
+            {
+                Debug.LogError("Nickname InputField is not assigned in the Inspector.");
+                return;
+            }
+            string nickname = nicknameInputField.text;
+            if (string.IsNullOrEmpty(nickname))
+            {
+                Debug.LogError("Nickname is empty. Please enter a valid nickname.");
+                return;
+            }
+
+            var uiManager = FindObjectOfType<UIManager>();
+            if (uiManager == null)
+            {
+                Debug.LogError("UIManager not found in scene.");
+                return;
+            }
+
+            int points = uiManager.GetCurrentPoints(); // You need to implement this method/property in UIManager
+
+            UpdateUserPoints(nickname, points);
+            Debug.Log($"Saved {points} points for {nickname}.");
+        }
+
+        // Add this property to ensure the path is always set before use
+        private string GetDatabaseFilePath()
+        {
+            if (string.IsNullOrEmpty(databaseFilePath))
+            {
+                #if UNITY_EDITOR
+                databaseFilePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, databaseFileName);
+                #else
+                databaseFilePath = Path.Combine(Application.dataPath, databaseFileName);
+                #endif
+            }
+            return databaseFilePath;
         }
 
         public void UpdateUserPoints(string nickname, int points)
         {
-            string connectionString = $"URI=file:{databaseFilePath}";
+            string connectionString = $"URI=file:{GetDatabaseFilePath()}";
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
             using var command = connection.CreateCommand();
@@ -105,6 +152,5 @@ namespace YourNamespace
             command.Parameters.AddWithValue("@nickname", nickname);
             command.ExecuteNonQuery();
         }
-
     }
 }

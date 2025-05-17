@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-     [SerializeField]
+    [SerializeField]
     private Text pointsDisplay;
     [SerializeField]
     private GameObject gameOverPanel;
@@ -18,18 +18,26 @@ public class UIManager : MonoBehaviour
 
     private GameObject previousNextShape;
 
+    // Add this field to track points
+    private int currentPoints = 0;
 
     public void DisplayPoints(int points)
     {
+        currentPoints = points; // Store the latest points
         pointsDisplay.text = "Points: " + points;
         var userCheck = FindObjectOfType<YourNamespace.UserCheck>();
         if (userCheck != null)
         {
-            // nickname — это имя текущего игрока, его нужно где-то хранить (например, в PlayerPrefs)
             string nickname = PlayerPrefs.GetString("CurrentNickname", "");
             userCheck.UpdateUserPoints(nickname, points);
         }
     }
+
+    public int GetCurrentPoints()
+    {
+        return currentPoints;
+    }
+
     public void DisplayGameOverPanel(int score)
     {
         gameOverPanel.SetActive(true);
@@ -38,7 +46,7 @@ public class UIManager : MonoBehaviour
 
     public void DisplayNextShape(GameObject shape)
     {
-        if(previousNextShape != null)
+        if (previousNextShape != null)
             Destroy(previousNextShape);
 
         GameObject gObject = Instantiate(shape, nextShapeDisplay);
