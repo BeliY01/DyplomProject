@@ -17,13 +17,28 @@ public class GameManager : MonoBehaviour
 
     private static GameManager instance;
     private static int points = 0;
-    //private const int SPEED_UP_THRESHOLD = 50;
+
+    // Reference to your UI panel
+    [SerializeField]
+    private GameObject Canvas_Main_UserCheck;
 
     private void Awake()
     {
         instance = this;
         gameOver = false;
         AddPoints(0);
+    }
+
+    private void Update()
+    {
+        // Pause if Canvas_Main_UserCheck is active, resume if not
+        if (Canvas_Main_UserCheck != null)
+        {
+            if (Canvas_Main_UserCheck.activeInHierarchy)
+                Time.timeScale = 0f;
+            else
+                Time.timeScale = 1f;
+        }
     }
 
     public static void GameOver()
@@ -40,7 +55,7 @@ public class GameManager : MonoBehaviour
     {
         GridController.instance.DeleteRow(index);
         Movement.CheckSpeedUp();
-        AddPoints( Mathf.FloorToInt( instance.deletedRowBonus * GridController.instance.size.x * GridController.instance.size.y) );
+        AddPoints(Mathf.FloorToInt(instance.deletedRowBonus * GridController.instance.size.x * GridController.instance.size.y));
     }
 
     public static void AddPoints(int p)
@@ -48,20 +63,17 @@ public class GameManager : MonoBehaviour
         points += p;
         instance.UIManager.DisplayPoints(points);
 
-        // Check if points have reached the threshold for speeding up
         if (points >= 10)
         {
-            Movement.CheckSpeedUp(); // Trigger speed-up in the Movement class
-           /* points -= 10;*/ // Reset points to allow for the next threshold
+            Movement.CheckSpeedUp();
         }
-
     }
 
     public void PlayAgain()
     {
         points = 0;
         Scene current = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(current.name);   
+        SceneManager.LoadScene(current.name);
     }
 
     private void DeactivateScripts()

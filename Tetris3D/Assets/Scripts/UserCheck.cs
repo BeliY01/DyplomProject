@@ -9,11 +9,13 @@ namespace YourNamespace
     public class UserCheck : MonoBehaviour
     {
         [SerializeField]
-        private InputField nicknameInputField; // Reference to the textbox (InputField)
+        private InputField nicknameInputField;
         [SerializeField]
-        private string databaseFileName = "UserDatabase.db"; // SQLite database file name
+        private string databaseFileName = "UserDatabase.db";
         [SerializeField]
-        private Button saveProgressButton; // Button to save the game result
+        private Button saveProgressButton;
+        [SerializeField]
+        private GameObject enterNamePanel; // Assign your UI panel for entering the name
 
         private string databaseFilePath;
 
@@ -29,7 +31,6 @@ namespace YourNamespace
                 CreateDatabase();
             }
 
-            // Assign the SaveCurrentPoints method to the button's onClick event
             if (saveProgressButton != null)
             {
                 saveProgressButton.onClick.AddListener(SaveCurrentPoints);
@@ -51,6 +52,28 @@ namespace YourNamespace
                     );";
             command.ExecuteNonQuery();
             Debug.Log("Database created successfully at: " + databaseFilePath);
+        }
+
+        // Call this from your "Start Game" button
+        public void TryStartGame()
+        {
+            if (nicknameInputField == null)
+            {
+                Debug.LogError("Nickname InputField is not assigned in the Inspector.");
+                return;
+            }
+            string nickname = nicknameInputField.text;
+            if (string.IsNullOrEmpty(nickname))
+            {
+                Debug.LogError("Please enter your name before starting the game.");
+                return;
+            }
+
+            // Hide the enter name UI
+            if (enterNamePanel != null)
+                enterNamePanel.SetActive(false);
+
+            AddOrContinueGame();
         }
 
         public void AddOrContinueGame()
@@ -77,7 +100,7 @@ namespace YourNamespace
                 {
                     string progress = result.ToString();
                     Debug.Log($"Welcome back, {nickname}! Continuing game from progress: {progress}");
-                    LoadGameScene();
+                    //LoadGameScene();
                 }
                 else
                 {
@@ -85,7 +108,7 @@ namespace YourNamespace
                     command.Parameters.AddWithValue("@progress", "NewGame");
                     command.ExecuteNonQuery();
                     Debug.Log($"Nickname '{nickname}' added to the database. Starting a new game.");
-                    LoadGameScene();
+                    //LoadGameScene();
                 }
             }
             else
@@ -94,12 +117,11 @@ namespace YourNamespace
             }
         }
 
-        private void LoadGameScene()
+       /* private void LoadGameScene()
         {
             SceneManager.LoadScene("Game");
-        }
+        }*/
 
-        // Call this from your Save Progress button
         public void SaveCurrentPoints()
         {
             if (nicknameInputField == null)
@@ -121,13 +143,12 @@ namespace YourNamespace
                 return;
             }
 
-            int points = uiManager.GetCurrentPoints(); // You need to implement this method/property in UIManager
+            int points = uiManager.GetCurrentPoints();
 
             UpdateUserPoints(nickname, points);
             Debug.Log($"Saved {points} points for {nickname}.");
         }
 
-        // Add this property to ensure the path is always set before use
         private string GetDatabaseFilePath()
         {
             if (string.IsNullOrEmpty(databaseFilePath))

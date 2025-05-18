@@ -17,11 +17,11 @@ public class ScoreBoard : MonoBehaviour
 
     void Start()
     {
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         databaseFilePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, databaseFileName);
-#else
+        #else
         databaseFilePath = Path.Combine(Application.dataPath, databaseFileName);
-#endif
+        #endif
         ShowScores();
     }
 
@@ -31,20 +31,30 @@ public class ScoreBoard : MonoBehaviour
         using var connection = new SqliteConnection(connectionString);
         connection.Open();
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Nickname, Points FROM Users ORDER BY Points DESC";
+        // Select all columns
+        command.CommandText = "SELECT Id, Nickname, Progress, Points FROM Users ORDER BY Points DESC";
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
         {
+            int id = reader["Id"] != DBNull.Value ? reader.GetInt32(0) : 0;
             string nickname = reader["Nickname"].ToString();
-            int points = reader["Points"] != DBNull.Value ? reader.GetInt32(1) : 0;
+            string progress = reader["Progress"] != DBNull.Value ? reader["Progress"].ToString() : "";
+            int points = reader["Points"] != DBNull.Value ? reader.GetInt32(3) : 0;
 
             GameObject row = Instantiate(rowPrefab, contentPanel);
             Text[] texts = row.GetComponentsInChildren<Text>();
-            if (texts.Length >= 2)
+            // Expecting at least 4 Texts: Id, Nickname, Progress, Points
+            if (texts.Length >= 4)
             {
-                texts[0].text = nickname;
-                texts[1].text = points.ToString();
+                texts[0].text = id.ToString();
+                texts[1].text = nickname;
+                texts[2].text = progress;
+                texts[3].text = points.ToString();
+            }
+            else if (texts.Length == 1) // If you use a single Text (e.g., for a multiline summary)
+            {
+                texts[0].text = $"ID: {id} | Name: {nickname} | Progress: {progress} | Points: {points}";
             }
         }
     }
