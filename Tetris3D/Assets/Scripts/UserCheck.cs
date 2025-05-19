@@ -17,6 +17,7 @@ namespace YourNamespace
         [SerializeField]
         private GameObject enterNamePanel; // Assign your UI panel for entering the name
 
+
         private string databaseFilePath;
 
         private void Start()
