@@ -22,6 +22,32 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject Canvas_Main_UserCheck;
 
+    [SerializeField] private GameObject pauseMenu;
+
+    public void Pause()
+    {
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+    }
+
+    public void Resume()
+    {
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
+
+    public void Home(int sceneID)
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(sceneID);
+    }
+
     private void Awake()
     {
         instance = this;
