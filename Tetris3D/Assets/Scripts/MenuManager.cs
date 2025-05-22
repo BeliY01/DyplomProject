@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField]
-    private string[] sceneNames = new string[5]; // Array to hold up to 5 scene names
+    private string[] sceneNames = new string[5];
 
     // Method to load a scene by index
     public void OpenSceneByIndex(int index)
@@ -25,6 +25,6 @@ public class MenuManager : MonoBehaviour
     public void ExitApplication()
     {
         Application.Quit();
-        Debug.Log("Application has been exited."); // For debugging in the editor
+        Debug.Log("Application has been exited.");
     }
 }

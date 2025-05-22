@@ -10,8 +10,7 @@ using System;
 public class ScoreBoard : MonoBehaviour
 {
     [SerializeField]
-    private Text scoreBoardText; // Присвойте этот Text через инспектор
-
+    private Text scoreBoardText; 
     void Start()
     {
         DisplayScoreBoard();

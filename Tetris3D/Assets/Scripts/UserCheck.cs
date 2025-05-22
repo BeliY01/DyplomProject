@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-using Mono.Data.Sqlite; // Ensure you have the Mono.Data.Sqlite DLL in your project
+using Mono.Data.Sqlite;
 using UnityEngine.SceneManagement;
 
 namespace YourNamespace
@@ -15,7 +15,7 @@ namespace YourNamespace
         [SerializeField]
         private Button saveProgressButton;
         [SerializeField]
-        private GameObject enterNamePanel; // Assign your UI panel for entering the name
+        private GameObject enterNamePanel; 
 
 
         private string databaseFilePath;
